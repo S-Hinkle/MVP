@@ -88,12 +88,12 @@ body, html {
     margin-right: 20px;
 }
 
-.button:active {
+.metamask-connect:active {
     transform: translateY(2px);
     background-color: #6f5bb6;
   }
 
-.button {
+.metamask-connect {
     border: 2px solid transparent;
     padding: 10px 20px;
     background-color: #8a2be2;
@@ -107,7 +107,7 @@ body, html {
     gap: 8px;
 }
 
-.button img {
+.metamask-connect img {
     width: 30px;
     height: 30px;
 }
