@@ -49,7 +49,9 @@ function loadMarketContent() {
                     <canvas class="box" id="marketCapChart"></canvas>
                 </div>
             </div>
-            <div class="large-box"></div>
+            <div class="large-box">
+                <div id="coinTableContainer"></div>
+            </div>
         </div>
     `;
     getMarketData();
@@ -72,12 +74,12 @@ async function getMarketData() {
             throw new Error(`HTTP error! Status: ${responseTopCoins.status}`);
         }
         const dataTopCoins = await responseTopCoins.json();
-        console.log(dataTopCoins); // TROUBLESHOOTING REMOVE LATER
+        //console.log('response after json',dataTopCoins); // TROUBLESHOOTING REMOVE LATER
 
 
 
         addMarketData(dataMarket);
-
+        addTopCoinData(dataTopCoins);
     } catch (error) {
         console.error('Error fetching market data:', error);
     }
@@ -158,6 +160,106 @@ function createMarketCapBreakdownChart(dataObject) {
         }
     });
 }
+
+
+
+
+
+
+
+
+
+
+function addTopCoinData(dataTopCoins) {
+    // fields that are needed 
+    
+    // .market_cap_rank
+    // .image
+    // .id
+    // .current_price
+    // .price_change_percentage_24h_in_currency
+    // .price_change_percentage_7d_in_currency
+    // .market_cap
+    // .total_volume
+
+    // Create table and table header
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <tr>
+            <th>Rank</th>
+            <th>Symbol</th>
+            <th>Coin</th>
+            <th>Price</th>
+            <th>24h</th>
+            <th>7D</th>
+            <th>Market Cap</th>
+            <th>24h Volume</th>
+        </tr>
+    `;
+
+    // Populate table rows with coin data
+    dataTopCoins.forEach(coin => {
+        const row = table.insertRow();
+        row.innerHTML = `
+            <td>${coin.market_cap_rank}</td>
+            <td><img src="${coin.image}" alt="${coin.id}" style="width: 30px; height: 30px;"></td>
+            <td>${coin.id}</td>
+            <td>$${coin.current_price.toLocaleString()}</td>
+            <td>${coin.price_change_percentage_24h_in_currency.toFixed(2)}%</td>
+            <td>${coin.price_change_percentage_7d_in_currency.toFixed(2)}%</td>
+            <td>$${coin.market_cap.toLocaleString()}</td>
+            <td>$${coin.total_volume.toLocaleString()}</td>
+        `;
+    });
+
+    // Append the table to the container
+    const container = document.getElementById('coinTableContainer');
+    container.innerHTML = ''; // Clear any existing content
+    container.appendChild(table);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

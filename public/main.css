@@ -128,7 +128,7 @@ body, html {
 
 .box-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     gap: 5px;
     width: 80%;
     margin: 0 auto;
@@ -138,6 +138,8 @@ body, html {
     display: flex;
     flex-direction: column;
     gap: 1px;
+    flex-grow: 1; /* Allow columns to grow to fill space */
+    margin: 0 5px; /* Optional: add some margin between columns */
 }
 
 .box {
@@ -148,23 +150,49 @@ body, html {
     border-radius: 10px;
     margin: 10px;
     width: 100%;
-    height: 150px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 #marketCapChart {
+    color: white;
     width: 100%;
-    height: 150px;
+    height: 100px;
 }
 
 .large-box {
     width: 80%;
-    height: 200px;
     margin: 20px auto;
     background-color: #323540;
     border-radius: 10px;
+    overflow: auto; /* Allows scrolling */
+    padding: 10px; /* Add some padding */
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+}
+
+/* Style for the table */
+table {
+    width: 90%; /* Adjusted width */
+    margin: auto; /* Center table in the flex container */
+    border-radius: 10px;
+    text-align: left;
+    border-collapse: collapse;
+    background-color: #242631;
+    /* Adjust the table layout as necessary */
+}
+
+/* Style for table cells */
+th, td {
+    color: white;
+    padding-left: 55px; /* Add padding inside each cell */
+    padding-right: 55px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* Other styles for th and td */
 }
 
 /* Labels for the boxes */
@@ -183,7 +211,3 @@ body, html {
         width: 80%;
     }
 }
-
-
-
-

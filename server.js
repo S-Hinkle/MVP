@@ -88,15 +88,31 @@ app.get('/api/market-data', async (req, res) => {
 // Route to fetch top coin data from CoinGecko
 app.get('/api/top-coins', async (req, res) => {
     try {
-        const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d%2C30d&locale=en&x_cg_demo_api_key=${process.env.COINGECKO_API_KEY}`;
+        const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d%2C30d&locale=en&x_cg_demo_api_key=${process.env.COINGECKO_API_KEY}`;
         const coingeckoResponse = await fetch(url);
         
         if (!coingeckoResponse.ok) {
             throw new Error(`HTTP error! Status: ${coingeckoResponse.status}`);
         }
 
-        const data = await coingeckoResponse.json();
-        res.status(200).json(data);
+        const fullDataFromAPI  = await coingeckoResponse.json();
+
+        // Transform the data for each coin
+        const transformedData = fullDataFromAPI.map(coin => ({
+            market_cap_rank: coin.market_cap_rank,
+            image: coin.image,
+            id: coin.id,
+            current_price: coin.current_price,
+            price_change_percentage_24h_in_currency: coin.price_change_percentage_24h_in_currency,
+            price_change_percentage_7d_in_currency: coin.price_change_percentage_7d_in_currency,
+            market_cap: coin.market_cap,
+            total_volume: coin.total_volume
+        }));
+
+        //console.log(transformedData)
+
+
+        res.status(200).json(transformedData);
     } catch (error) {
         console.error('Error fetching market data from CoinGecko:', error);
         res.status(500).json({ error: 'Internal server error' });
