@@ -5,6 +5,7 @@ import { EvmChain } from '@moralisweb3/common-evm-utils';
 import { promises as fs } from 'fs';
 import dotenv from "dotenv";
 import cors from 'cors';
+import fetch from 'node-fetch';
 import pkg from 'pg';
 const { Pool } = pkg;
 
