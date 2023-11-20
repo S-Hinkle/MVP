@@ -62,7 +62,7 @@ app.post('/user/login', async (req, res) => {
         // Check if the user exists
         const userQuery = 'SELECT * FROM wallets WHERE wallet_address = $1';
         const userResult = await pool.query(userQuery, [userAddress]);
-        console.log('userResult: ' + JSON.stringify(userResult.rows[0].id)) // TROUBLESHOOTING REMOVE LATER
+        //console.log('userResult: ' + JSON.stringify(userResult.rows[0].id)) // TROUBLESHOOTING REMOVE LATER
 
         if (userResult.rows.length === 0) {
             // User does not exist, create a new one
