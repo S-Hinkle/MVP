@@ -11,13 +11,18 @@ const { Pool } = pkg;
 // Congif to use env variables
 dotenv.config();
 
-// Create a new pool instance to manage multiple database connections.
+// // Create a new pool instance to manage multiple database connections.
+// const pool = new Pool({
+//     user: process.env.DB_USER,
+//     host: process.env.DB_HOST,
+//     database: process.env.DB_NAME,
+//     password: process.env.DB_PASS,
+//     port: process.env.DB_PORT,
+//   });
+
+  // Create a new pool instance to manage multiple database connections.
 const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASS,
-    port: process.env.DB_PORT,
+    connectionString: process.env.DATABASE_URL
   });
 
 // Create an Express application
