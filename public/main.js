@@ -331,12 +331,8 @@ function walletSearchData() {
 
 function resetWalletSearchData() {
     const contentContainer = document.getElementById('content-container');
-    contentContainer.innerHTML = `
-    <div class="portfolio-container">
-        <input type="text" id="blockchainAddressInput" placeholder="Enter coin name" />
-        <button onclick="populateWalletSearchData()">Search</button>
-    </div>
-`;
+    contentContainer.innerHTML = '';
+    walletSearchData();
 }
 
 async function populateWalletSearchData() {
@@ -660,6 +656,7 @@ async function displayUserCoins(coins) {
     const coinDataContainer = document.getElementById('coin-data');
     coinDataContainer.innerHTML = ``;
 
+    console.log(coins)
     for (const coin of coins) {
         try {
             const backendResponse = await fetch('/api/fetch-coin-data', {
@@ -702,8 +699,8 @@ function createCoinDetailElement(coinData, container) {
         <h2>Coin Data</h2>
         <img src="${coinData.image}" alt="${coinData.id}" class="coin-image" />
         <div>${coinData.id}</div>
-        <a href="${coinData.homepage}" target="_blank">Homepage</a><br>
-        <a href="${coinData.blockchain_site}" target="_blank">Block Explorer</a>
+        <a href="${coinData.homepage}" target="_blank" style="color: #8071DD; text-decoration: none;">Homepage</a><br>
+        <a href="${coinData.blockchain_site}" target="_blank" style="color: #8071DD; text-decoration: none;">Block Explorer</a>
     `;
     topSectionsDiv.appendChild(coinInfoDiv);
 
@@ -714,8 +711,8 @@ function createCoinDetailElement(coinData, container) {
         <h2>Community and Developer Data</h2>
         <div>4 Week Commit Count: ${coinData.commit_count_4_weeks}</div>
         <div>Twitter Followers: ${coinData.twitter_followers}</div>
-        <div>Positive Sentiment %: ${coinData.sentiment_votes_up_percentage}</div>
-        <div>Negative Sentiment %: ${coinData.sentiment_votes_down_percentage}</div>
+        <div>Positive Sentiment: ${coinData.sentiment_votes_up_percentage}%</div>
+        <div>Negative Sentiment: ${coinData.sentiment_votes_down_percentage}%</div>
     `;
     topSectionsDiv.appendChild(communityDevDiv);
 
@@ -832,12 +829,13 @@ document.querySelectorAll('.navbar-links a').forEach(link => {
 // Decide which page needs to load according to navbar link
 function loadContent(page) {
     const contentContainer = document.getElementById('content-container');
+    contentContainer.innerHTML = '';
     switch (page) {
         case 'Portfolio':
             //contentContainer.innerHTML = '<p>Portfolio content goes here.</p>';
             connectedEthAddress ? portolioData() : displayConnectMessage();
             break;
-        case 'Coin Screener':
+        case 'Coin List':
             //contentContainer.innerHTML = '<p>Coin Screener content goes here.</p>';
             connectedEthAddress ? coinScreenerData() : displayConnectMessage();
             break;
@@ -845,7 +843,7 @@ function loadContent(page) {
             loadMarketContent();
             break;
         case 'Wallet Search':
-            connectedEthAddress ? walletSearchData() : displayConnectMessage();
+            walletSearchData()
             //contentContainer.innerHTML = '<p>Wallet Analysis content goes here.</p>';
             break;
     }
@@ -915,11 +913,45 @@ async function login() {
 function displayConnectMessage() {
     const contentContainer = document.getElementById('content-container');
     contentContainer.innerHTML = '';
-    contentContainer.innerText = 'Please ensure the MetaMask browser extension is installed connect by clicking the connect button in the top right to see portfolio information';
-    contentContainer.style.textAlign = 'center';
+
+    // Create an h2 element
+    const message = document.createElement('h3');
+    message.innerText = 'Please ensure the MetaMask browser extension is installed connect by clicking the connect button in the top right to see portfolio information';
+    message.style.color = 'white';
+    message.style.textAlign = 'center';
+
+    // Add some margin at the top
     contentContainer.style.marginTop = '20px';
 
+    // Append the h2 element to the content container
+    contentContainer.appendChild(message);
     //contentContainer.appendChild(messageDiv); // Adjust this if you want to append the div to a specific container
 }
 
 
+document.addEventListener('DOMContentLoaded', () => {
+    const contentContainer = document.getElementById('content-container');
+    contentContainer.innerHTML = '';
+    // contentContainer.style.display = 'flex';
+    // contentContainer.style.flexFlow = 'row wrap';
+    // contentContainer.style.justifyContent = 'center'
+
+    // Create an h2 element
+    const message = document.createElement('h2');
+    message.innerHTML = `
+            Welcome to Dapper Finance!<br><br>
+            MARKET: Overview of Cryptocurrency Market<br>
+            WALLET SEARCH: Look up tokens and NFTs by wallet<br>
+            PORTFOLIO: Look up tokens and NFTs for connected wallet*<br>
+            COIN LIST: Create list of tokens to view*<br><br>
+            *Requires MetaMask connection
+        `;
+    message.style.color = 'white';
+    message.style.textAlign = 'center';
+
+    // Add some margin at the top
+    contentContainer.style.marginTop = '40px';
+
+    // Append the h2 element to the content container
+    contentContainer.appendChild(message);
+});
