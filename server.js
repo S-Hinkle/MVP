@@ -241,18 +241,6 @@ app.post('/api/fetch-coin-data', async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 // ==================== Data For Market Page ====================  //
 
 // Route to fetch market data from CoinGecko
