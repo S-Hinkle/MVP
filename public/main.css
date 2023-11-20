@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
 body, html {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Nunito', sans-serif;
     background-color: #242631;
 }
 
@@ -114,9 +116,7 @@ body, html {
 
 
 
-
-
-
+/* ========================================================== */
 
 
 
@@ -138,8 +138,8 @@ body, html {
     display: flex;
     flex-direction: column;
     gap: 1px;
-    flex-grow: 1; /* Allow columns to grow to fill space */
-    margin: 0 5px; /* Optional: add some margin between columns */
+    flex-grow: 1;
+    margin: 0 5px;
 }
 
 .box {
@@ -157,7 +157,7 @@ body, html {
 }
 
 #marketCapChart {
-    color: white;
+    color: #F8F8F8;
     width: 100%;
     height: 100px;
 }
@@ -167,37 +167,37 @@ body, html {
     margin: 20px auto;
     background-color: #323540;
     border-radius: 10px;
-    overflow: auto; /* Allows scrolling */
-    padding: 10px; /* Add some padding */
-    display: flex; /* Use flexbox */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
+    overflow: auto;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Style for the table */
 table {
-    width: 90%; /* Adjusted width */
-    margin: auto; /* Center table in the flex container */
+    width: 90%;
+    margin: auto;
     border-radius: 10px;
     text-align: left;
     border-collapse: collapse;
     background-color: #242631;
-    /* Adjust the table layout as necessary */
+    
 }
 
 /* Style for table cells */
 th, td {
-    color: white;
-    padding-left: 55px; /* Add padding inside each cell */
+    color: #F8F8F8;
+    padding-left: 55px;
     padding-right: 55px;
     padding-top: 10px;
     padding-bottom: 10px;
-    /* Other styles for th and td */
+    
 }
 
 /* Labels for the boxes */
 .box div {
-    color: white;
+    color: #F8F8F8;
     text-align: center;
     padding-top: 20px;
 }
@@ -210,4 +210,152 @@ th, td {
     .box, .large-box, #marketCapChart {
         width: 80%;
     }
+}
+
+
+/* ========================================================== */
+
+
+.portfolio-container {
+    color: #F8F8F8;
+    background-color: #323540;
+    text-align: center;
+    padding: 20px;
+}
+
+.portfolio-box {
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+/* table {
+    width: 100%;
+    background-color: #242631;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #323540;
+    padding: 8px;
+    text-align: left;
+} */
+
+.nft-card {
+    display: inline-block;
+    height: 300px;
+    width: 250px;
+    background-color: #242631;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.nft-card img {
+    width: 250px;
+    height: 250px;
+    border-radius: 10px;
+}
+
+.nft-card a {
+    color: #F8F8F8;
+    text-decoration: none;
+}
+
+.nft-card-details {
+    text-align: center;
+}
+
+/* ========================================================== */
+
+
+/* Styling for the coin-screener-container */
+.coin-screener-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #242631;
+    padding: 20px;
+    width: 100%;
+    color: #F8F8F8;
+}
+
+/* Styling for the coin-screen-data-box */
+.coin-screen-data-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin-top: 47px;
+}
+
+/* Styling for each coin detail */
+.coin-detail {
+    background-color: #323540;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 90%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles for individual sections in the top-sections */
+.coin-info, .community-dev-info {
+    background-color: #323540;
+    border-radius: 10px;
+    padding: 20px;
+    flex: 1;
+    margin: 0 5px;
+    color: #F8F8F8;
+}
+
+/* Style for the market data table container */
+.market-table-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    border-radius: 10px;
+    background-color: #323540;
+    margin-bottom: 20px;
+}
+
+/* Style for the description section */
+.coin-description {
+    width: 80%;
+    background-color: #323540;
+    border-radius: 10px;
+    padding: 20px;
+    color: #F8F8F8;
+    margin-bottom: 20px;
+}
+
+/* Adjusting table style */
+table {
+    width: 100%;
+    border-radius: 10px;
+    text-align: left;
+    border-collapse: collapse;
+    background-color: #242631;
+}
+
+th, td {
+    color: #F8F8F8;
+    padding: 10px 55px; 
+}
+
+th {
+    border-bottom: 2px solid #F8F8F8;
+}
+
+td {
+    border-bottom: 1px solid #323540;
+}
+
+.coin-image {
+    width: 50px;
+    height: auto;
+    border-radius: 10px;
+    display: block;
+    margin-bottom: 10px;
 }
