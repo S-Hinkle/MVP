@@ -234,7 +234,7 @@ async function portolioData() {
 
 
 
-    const testWallet = "0x98b24E6B52109C70A83783DCB3B6825BA6dEcF3C"
+    
 
     const erc20Balance = await getWalletTokenBalances("0x1", connectedEthAddress);
     const avaxBalance = await getWalletTokenBalances("0xa86a", connectedEthAddress);
@@ -294,7 +294,154 @@ async function portolioData() {
 
 
 
-    const walletNFTs = await getWalletNFTs(testWallet);
+    const walletNFTs = await getWalletNFTs(connectedEthAddress);
+    //console.log(walletNFTs)
+
+
+    // Extract only the necessary data from each NFT and filter out NFTs without a mediaUrl
+    const filteredNFTs = walletNFTs.result
+    .filter(nft => nft.media && nft.media.media_collection && nft.media.media_collection.medium)
+    .map(nft => ({
+        name: nft.normalized_metadata ? nft.normalized_metadata.name : null,
+        collection: nft.name,
+        tokenAddress: nft.token_address,
+        tokenId: nft.token_id,
+        mediaUrl: nft.media.media_collection.medium
+    }));
+
+
+    createNFTDisplayCards(filteredNFTs);
+    //console.log(filteredNFTs);
+
+}
+// =========================== Listeners to handle Wallet Search Functionality =========================== //
+
+
+const testWallet = "0x98b24E6B52109C70A83783DCB3B6825BA6dEcF3C"
+
+function walletSearchData() {
+    const contentContainer = document.getElementById('content-container');
+    contentContainer.innerHTML = `
+        <div class="portfolio-container">
+            <input type="text" id="blockchainAddressInput" placeholder="Enter coin name" />
+            <button onclick="populateWalletSearchData()">Search</button>
+        </div>
+    `;
+}
+
+function resetWalletSearchData() {
+    const contentContainer = document.getElementById('content-container');
+    contentContainer.innerHTML = `
+    <div class="portfolio-container">
+        <input type="text" id="blockchainAddressInput" placeholder="Enter coin name" />
+        <button onclick="populateWalletSearchData()">Search</button>
+    </div>
+`;
+}
+
+async function populateWalletSearchData() {
+    const blockchainAddressInput = document.getElementById('blockchainAddressInput').value;
+    if (!blockchainAddressInput) {
+        alert('Please enter a address.');
+        return;
+    }
+    const contentContainer = document.getElementById('content-container');
+    contentContainer.innerHTML = `
+        <div class="portfolio-container">
+            <input type="text" id="coinNameInput" placeholder="Enter coin name" />
+            <button onclick="resetWalletSearchData()">Reset</button>
+            <div class="portfolio-box" id="address">Wallet Analytics For Address: ${blockchainAddressInput}</div>
+            <div class="portfolio-box" id="token-balance">Token Balances</div>
+            <div class="portfolio-box" id="nfts"></div>
+            <div class="portfolio-box" id="transactions"></div>
+        </div>
+    `;
+
+    const ethBalance = await getNativeBalance("0x1", blockchainAddressInput);
+    //console.log(ethBalance);
+
+    const ethData = await getNativeprice();
+    const ethPrice = ethData.market_data.current_price.usd
+
+    const ethBalanceWithChain = [
+        {
+            "token_address": null,
+            "symbol": "eth",
+            "name": "Ethereum",
+            "logo": null,
+            "thumbnail": null,
+            "decimals": 18,
+            "balance": ethBalance.balance,
+            "possible_spam": false,
+            "chain": "0x1",
+            "usdPrice": ethPrice
+        }
+    ]
+
+
+
+
+    const testWallet = "0x98b24E6B52109C70A83783DCB3B6825BA6dEcF3C"
+
+    const erc20Balance = await getWalletTokenBalances("0x1", blockchainAddressInput);
+    const avaxBalance = await getWalletTokenBalances("0xa86a", blockchainAddressInput);
+    const bscBalance = await getWalletTokenBalances("0x38", blockchainAddressInput);
+    const polyBalance = await getWalletTokenBalances("0x89", blockchainAddressInput);
+    const fantomBalance = await getWalletTokenBalances("0xfa", blockchainAddressInput);
+
+    const erc20BalanceWithChain = erc20Balance.map(token => ({ ...token, chain: "0x1" }));
+    const avaxBalanceWithChain = avaxBalance.map(token => ({ ...token, chain: "0xa86a" }));
+    const bscBalanceWithChain = bscBalance.map(token => ({ ...token, chain: "0x38" }));
+    const polyBalanceWithChain = polyBalance.map(token => ({ ...token, chain: "0x89" }));
+    const fantomBalanceWithChain = fantomBalance.map(token => ({ ...token, chain: "0xfa" }));
+
+    //console.log(erc20BalanceWithChain);
+
+    // Combine balances from all blockchains
+    const allBalances = [
+        ...erc20BalanceWithChain,
+        ...avaxBalanceWithChain,
+        ...bscBalanceWithChain,
+        ...polyBalanceWithChain,
+        ...fantomBalanceWithChain
+    ].filter(token => token && token.balance !== "0" && token.possible_spam === false);
+
+    //console.log(allBalances);
+
+    // Fetch USD prices and add to the token data
+    const tokenDataWithPrices = await Promise.all(allBalances.map(async token => {
+        const chain = token.chain;
+        const address = token.token_address;
+        try {
+            const priceResponse = await fetch('/api/getTokenPrice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ chain, address}),
+            });
+
+            if (!priceResponse.ok) {
+                throw new Error(`HTTP error! Status: ${priceResponse.status}`);
+            }
+
+            const priceData = await priceResponse.json();
+            return {
+                ...token,
+                usdPrice: priceData.usdPrice
+            };
+        } catch (error) {
+            console.error('Error fetching token price:', error);
+            return token; // Return token without price in case of error
+        }
+    }));
+
+    // Create and display the table
+    createTokenBalanceTable(tokenDataWithPrices, ethBalanceWithChain);
+
+
+
+    const walletNFTs = await getWalletNFTs(blockchainAddressInput);
     //console.log(walletNFTs)
 
 
@@ -318,13 +465,19 @@ async function portolioData() {
 
 
 
+
+
+
+
+
 function createTokenBalanceTable(tokenDataWithPrices, ethBalanceWithChain) {
-    
+    console.log(tokenDataWithPrices)
+    console.log(ethBalanceWithChain)
+
     const tokenData = [
         ...ethBalanceWithChain,
         ...tokenDataWithPrices
     ]
-    
     const tableContainer = document.getElementById('token-balance');
     tableContainer.innerHTML = '';
 
@@ -455,16 +608,6 @@ async function getWalletNFTs(address) {
         console.error('Error fetching wallet token balances:', error);
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -701,8 +844,9 @@ function loadContent(page) {
         case 'Market':
             loadMarketContent();
             break;
-        case 'Wallet Analysis':
-            contentContainer.innerHTML = '<p>Wallet Analysis content goes here.</p>';
+        case 'Wallet Search':
+            connectedEthAddress ? walletSearchData() : displayConnectMessage();
+            //contentContainer.innerHTML = '<p>Wallet Analysis content goes here.</p>';
             break;
     }
 }

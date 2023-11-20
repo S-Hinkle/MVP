@@ -224,6 +224,9 @@ th, td {
 }
 
 .portfolio-box {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
     margin-bottom: 20px;
     border-radius: 10px;
 }
@@ -241,7 +244,8 @@ th, td {
 } */
 
 .nft-card {
-    display: inline-block;
+    
+    
     height: 300px;
     width: 250px;
     background-color: #242631;
